@@ -7,3 +7,9 @@ title = "My new Victor-Hugo site"
 # See configuration options for more details: 
 # https://gohugo.io/getting-started/configuration/#toml-configuration
 disableKinds = ["RSS", "taxonomy", "taxonomyTerm"]
+
+[params.staticman]
+    endpoint = "https://rhcomments.herokuapp.com/v2/entry"
+    username = "port949"
+    repository = "victor-hugo-2020"
+    branch = "master"
