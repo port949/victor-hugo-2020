@@ -3,6 +3,11 @@ languageCode = "en-us"
 languageLang = "en"
 title = "My new Victor-Hugo site"
 
+# Display comment count if comments exist, irrelevant of whether commenting is turned on or off.
+comment_count = true
+# Dissable the submission of new comments, existing comments will remain displayed.
+disable_comments = false
+
 # RSS, categories and tags disabled for an easy start
 # See configuration options for more details: 
 # https://gohugo.io/getting-started/configuration/#toml-configuration
