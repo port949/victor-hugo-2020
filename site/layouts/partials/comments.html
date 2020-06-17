@@ -3,7 +3,7 @@
         {{ if .Site.Params.staticman }}
         <h3 class="title"><a href="#comments">&#9997; Comments</a></h3>
         <section class="staticman-comments post-comments">
-            {{ $comments := readDir "data/comments" }}
+            {{ $comments := readDir "site/data/comments" }}
             {{ $.Scratch.Add "hasComments" 0 }}
             {{ $postSlug := .File.BaseFileName }}
     
