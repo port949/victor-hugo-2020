@@ -1,12 +1,8 @@
-baseurl = "/"
+baseurl = "https://nervous-kalam-14020d.netlify.app"
 languageCode = "en-us"
 languageLang = "en"
 title = "My new Victor-Hugo site"
 
-# Display comment count if comments exist, irrelevant of whether commenting is turned on or off.
-comment_count = true
-# Dissable the submission of new comments, existing comments will remain displayed.
-disable_comments = false
 
 # RSS, categories and tags disabled for an easy start
 # See configuration options for more details: 
