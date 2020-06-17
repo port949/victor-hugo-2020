@@ -25,33 +25,12 @@
       <textarea name="fields[body]" class="post-comment-field" placeholder="Your message. Feel free to use Markdown." rows="10"></textarea>
     </fieldset>
 
-    <fieldset>
-      <div class="notify-me">
-        <input type="checkbox" id="comment-form-reply" name="options[subscribe]" value="email">
-        Send me an email when someone comments on this post.
-      </div>
-    </fieldset>
-
-    <fieldset>
-      <div class="g-recaptcha" data-sitekey="{{ .Site.Params.recaptcha_siteKey }}" data-callback="enableBtn"></div>
+    
 
       <input type="submit" class="post-comment-field btn" value="Submit" id="submit_button">
     </fieldset>
 
   </form>
-
-  <script async src='https://www.google.com/recaptcha/api.js' ></script>
-
-
-  <script type="text/javascript">
-    document.getElementById("submit_button").disabled = true;
-  </script>
-
-  <script type="text/javascript">
-    function enableBtn(){
-       document.getElementById("submit_button").disabled = false;
-      }
-  </script>
 
   <div id="post-submitted" class="dialog">
     <h3>Thank you</h3>
