@@ -1,65 +1,46 @@
-{{ if and .Site.Params.staticman (not (or .Site.Params.disable_comments .Params.disable_comments)) }}
-    <section id="comments">
-        {{ if .Site.Params.staticman }}
-        <h3 class="title"><a href="#comments">&#9997; Comments</a></h3>
-        <section class="staticman-comments post-comments">
-            {{ $comments := readDir "data/comments" }}
-            {{ $.Scratch.Add "hasComments" 0 }}
-            {{ $postSlug := .File.BaseFileName }}
-    
-            {{ range $comments }}
-            {{ if eq .Name $postSlug }}
-                {{ $.Scratch.Add "hasComments" 1 }}
-                {{ range $index, $comments := (index $.Site.Data.comments $postSlug ) }}
-                    {{ if not .reply_to }}
-    
-                    <div id="commentid-{{ ._id }}" class="post-comment">
-                        <div class="post-comment-header">
-                        <img class="post-comment-avatar" src="https://www.gravatar.com/avatar/{{     .email }}?s=70&r=pg&d=identicon">
-                            <p class="post-comment-info">
-                                <span class="post-comment-name">{{ .name }}</span>
-                                <br>
-                                <a href="#commentid-{{ ._id }}" title="Permalink to this comment">
-                                <time class="post-time">{{ dateFormat "Monday, Jan 2, 2006 at     15:04 MST" .date }}</time>
-                                </a>
-                            </p>
-                        </div>
-                        <div class="comment-message">
-                            {{ .comment | markdownify }}
-                        </div>
-                        <div class="comment__reply">
-                        <button id="{{ ._id }}" class="btn-info" href="#comment-form" onclick="changeValue('fields[reply_to]', '{{ ._id }}')">Reply to {{ .name     }}</button>
-                        </div>
-                    </div>
-                {{ partial "comment-replies" (dict "entryId_parent" $postSlug "SiteDataComments_parent" $.Site.Data.comments "parentId" ._id "parentName" .name     "context" .) }}
-    
-                    {{ end }}
-            {{ end }}
-        {{ end }}
+<section class="post-comments">
+  <h3>Comments</h3>
+
+  {{ $comments := readDir "data/comments" }}
+  {{ $.Scratch.Add "hasComments" 0 }}
+  {{ $entryId := .UniqueID }}
+
+  {{ range $comments }}
+    {{ if eq .Name $entryId }}
+      {{ $.Scratch.Add "hasComments" 1 }}
+      {{ range $index, $comments := (index $.Site.Data.comments $entryId ) }}
+        <div class="post-comment">
+          <div class="post-comment-header">
+            <img class="post-comment-avatar" src="https://www.gravatar.com/avatar/{{ .email }}?s=100">
+            <p class="post-comment-info"><strong>{{ .name }}</strong><br>{{ dateFormat "02/01/2006" .date }}</p>
+          </div>
+          {{ .body | markdownify }}
+        </div>
+      {{ end }}       
     {{ end }}
+  {{ end }}
 
-        <form id="comment-form" class="post-new-comment" method="post" action="{{ .Site.Params.staticman.endpoint }}/{{ .Site.Params.staticman.username }}/{{ .Site.Params.staticman.repository }}/{{ .Site.Params.staticman.branch }}/comments">
-            {{ if eq ($.Scratch.Get "hasComments") 0 }}
-                <p>Be the first to leave a comment! 🎉</p>
-            {{ end }}
-            <h3 class="prompt">Say something</h3>
-            <input type="hidden" name="options[redirect]" value="{{ .Permalink }}#comment-submitted">
-            <input type="hidden" name="options[slug]" value="{{ .File.BaseFileName }}">
-            <input type="text" name="fields[name]" class="post-comment-field" placeholder="Name *" required/>
-            <input type="email" name="fields[email]" class="post-comment-field" placeholder="Email address (will not be public) *" required/>
-            <input type="hidden" id="comment-parent" name="fields[reply_to]" value="">
-            <textarea name="fields[comment]" class="post-comment-field" placeholder="Comment (markdown is accepted) *" required rows="10"></textarea>
-            <input type="submit" class="post-comment-field btn btn-primary comment-buttons" value="Submit">
-        </form>
-    </section>
+  {{ if eq ($.Scratch.Get "hasComments") 0 }}
+    <p>Nothing yet.</p>
+  {{ end }}
 
-    <div id="comment-submitted" class="dialog">
-        <h3>Thank you!</h3>
-        <p>Your comment has been submitted and will be published once it has been approved. &#128522;</p>
+  <h3>Say something</h3>
 
-        <p><a href="#" class="btn btn-primary comment-buttons ok">OK</a></p>
-    </div>
-
-    {{ end }}
+  <form class="post-new-comment" method="POST" action="https://rhcomments.herokuapp.com/v2/entry/port949/hugo-staticman/master/comments">
+  <!--form class="post-new-comment" method="POST" action="http://localhost:8055/v2/entry/eduardoboucas/staticman-test/master/comments"-->
+    <input type="hidden" name="options[redirect]" value="{{ .Permalink }}#comment-submitted">
+    <input type="hidden" name="options[entryId]" value="{{ .UniqueID }}">
+    <input name="fields[name]" type="text" class="post-comment-field" placeholder="Your name">
+    <input name="fields[email]" type="email" class="post-comment-field" placeholder="Your email address">
+    <textarea name="fields[body]" class="post-comment-field" placeholder="Your message. Feel free to use Markdown." rows="10"></textarea>
+    <input type="submit" class="post-comment-field btn" value="Submit">
+  </form>
 </section>
-{{ end }}
+
+<div id="comment-submitted" class="dialog">
+<h3>Thank you</h3>
+  <p>Your comment has been submitted and will be published once it has been approved.</p>
+  <p><a href="https://github.com/eduardoboucas/hugo-plus-staticman/pulls">Click here</a> to see the pull request you generated.</p>
+  
+  <p><a href="#" class="btn">OK</a></p>
+</div>
